@@ -10,7 +10,22 @@ Design and stack take inspiration from `~/Developer/elleniya` (palette-from-sour
 
 ## Status
 
-**Prototype — static, content-first.** Plan is *static now, CMS later*: nail the design and information architecture as a static site, then add the PHP/MariaDB magic-link CMS (mirroring elleniya) once content settles so Nicole can keep adding resources herself.
+**Prototype — static, content-first.** The deck is also rendered to faithful HTML/CSS with live inline links, so **Google Slides can serve as the CMS** (see *Slides as CMS* below).
+
+## Slides as CMS (regenerating from the deck)
+
+Nicole keeps authoring in Google Slides — the site regenerates from her `.pptx` export:
+
+1. In Google Slides: **File → Download → Microsoft PowerPoint (.pptx)**.
+2. Unzip it into `assets/_extract/unpacked/` (the `ppt/...` tree), and refresh the rendered slide PNGs in `assets/_extract/slides_png/` (PDF export → `pdftoppm`).
+3. Run the two build scripts:
+   ```
+   node scripts/build-images.js        # links per slide, cover images, flat slide JPGs
+   node scripts/build-slides-html.js   # faithful HTML render of every slide
+   ```
+4. Commit. The site now reflects her edits — new links become clickable automatically.
+
+`scripts/build-slides-html.js` parses each slide's shapes (position, fills, borders, rotation, fonts, colors incl. theme colors, text highlights, autofit) into absolutely-positioned HTML scaled by CSS container queries, with real `<a>` links inline. The flat JPG (`assets/slides/`) remains an automatic fallback for any slide that doesn't render cleanly (e.g. the 1 gradient / 2 table slides).
 
 ## Stack
 

@@ -7,3 +7,7 @@ f-*.png
 scripts/mapping-report.json
 final-*.png
 h-*.png
+poc-*.png
+poc-slides.html
+assets/_poc/
+lb-*.png

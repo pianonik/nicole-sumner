@@ -73,7 +73,8 @@
   }
   function showLb() {
     const n = lbList[lbIdx];
-    el('lbImg').src = slideURL(n);
+    const html = window.CT_SLIDE_HTML && window.CT_SLIDE_HTML[n];  // faithful HTML (real text + inline links)
+    el('lbStage').innerHTML = html || `<img src="${slideURL(n)}" alt="Slide ${n}">`;  // fallback to flat JPG
     el('lbCaption').textContent = `Slide ${n} of ${window.CT_SLIDE_COUNT || lbList.length}`;
     const multi = lbList.length > 1 ? 'visible' : 'hidden';
     el('lbPrev').style.visibility = multi; el('lbNext').style.visibility = multi;
@@ -238,13 +239,13 @@
     const im = medOf(r.id);
     const hasSlide = im && im.slideNum;
     const cover = im && im.cover
-      ? `<div class="modal-cover${hasSlide ? ' clickable' : ''}"${hasSlide ? ` data-slide="${im.slideNum}"` : ''}><img src="${im.cover}" alt="">${hasSlide ? '<span class="cover-hint">⧉ Original slide</span>' : ''}</div>` : '';
+      ? `<div class="modal-cover${hasSlide ? ' clickable' : ''}"${hasSlide ? ` data-slide="${im.slideNum}"` : ''}><img src="${im.cover}" alt="">${hasSlide ? '<span class="cover-hint">More…</span>' : ''}</div>` : '';
     const resLinks = linksForRes(r.id);
     const links = resLinks.length
       ? `<div class="links-block"><div class="links-head">Resources &amp; links from this slide</div>
          <ul class="links-list">${linkItems(resLinks)}</ul></div>` : '';
     const moreBtn = hasSlide
-      ? `<button class="slide-link" data-slide="${im.slideNum}">More… (slide #${im.slideNum})</button>` : '';
+      ? `<button class="slide-link" data-slide="${im.slideNum}">More…</button>` : '';
     el('modalBody').innerHTML = `
       ${cover}
       <div class="meta-top">

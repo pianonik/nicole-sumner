@@ -285,7 +285,14 @@ section.block { padding: 5.5rem 0; }
 /* ---------------- LIGHTBOX ---------------- */
 .lightbox { position: fixed; inset: 0; z-index: 3000; background: rgba(21,19,15,0.94); display: none; align-items: center; justify-content: center; gap: 1.4rem; flex-wrap: wrap; padding: 3rem 4.5rem; }
 .lightbox.open { display: flex; }
-.lightbox img { max-width: min(70vw, 1000px); max-height: 82vh; border: 3px solid var(--black); box-shadow: 0 20px 60px rgba(0,0,0,0.6); background: #fff; }
+/* stage holds either the faithful HTML slide or a fallback JPG */
+.lb-stage { width: min(70vw, 1000px); aspect-ratio: 16 / 9; max-height: 82vh; border: 3px solid var(--black); box-shadow: 0 20px 60px rgba(0,0,0,0.6); background: #fff; overflow: hidden; }
+.lb-stage > img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* a rendered HTML slide (real text + inline clickable links) */
+.slide-html { container-type: inline-size; position: relative; width: 100%; height: 100%; overflow: hidden; font-family: Inter, Arial, sans-serif; line-height: 1.12; color: #000; background: #fff; }
+.slide-html p { margin: 0; white-space: pre-wrap; }
+.slide-html a { cursor: pointer; }
+.slide-html a:hover { filter: brightness(0.8); }
 .lb-links { width: 300px; max-height: 82vh; overflow-y: auto; background: var(--paper); border: 3px solid var(--black); box-shadow: 8px 8px 0 rgba(0,0,0,0.4); padding: 1.1rem 1.2rem; }
 .lb-links-head { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.05em; color: var(--ink); margin-bottom: 0.7rem; }
 .lb-links .links-list a { font-size: 0.9rem; }

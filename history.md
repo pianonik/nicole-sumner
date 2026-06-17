@@ -1,5 +1,16 @@
 # Courageous Teachers — History
 
+## 2026-06-17 — Faithful PPTX→HTML slides (Google Slides becomes the CMS)
+
+**User:** Drop the "original slide" wording (just "More…"); can the actual links be clickable on the slide, not just a list?; can we convert the deck to faithful HTML5+CSS? — "if we can pull it off then we can let her continue to work with the slides, since she's obviously so good at it." Chose **full rollout, all 133**.
+
+**Response — built a PPTX→HTML renderer** (`scripts/build-slides-html.js`) so slides become real HTML with **inline clickable links**, unlocking the workflow: she edits in Google Slides → export `.pptx` → unzip into `assets/_extract/unpacked` → `node scripts/build-slides-html.js` → site regenerates. No website hand-editing.
+- Renders each slide as absolutely-positioned `<div>`/`<img>` from EMU coords → %, scaled responsively via CSS **container queries** (`cqw` font sizes). Handles: shape fills (disambiguated from borders via pre-`<a:ln>` split), borders, rotation/flip, roundRect, **autofit fontScale**, alignment, vertical anchor, bold/italic, **srgb + theme (schemeClr) colors**, **text highlights** (the red/black bold bars — 22 slides), fonts (Comic Sans→Permanent Marker), inline + picture hyperlinks, slide background. Deck has **no grouped shapes** (checked) — so no nested-coord handling needed.
+- Debugged via headless screenshots (Playwright): fixed color-inheritance (faint title), autofit (giant quote text), fill-vs-border disambiguation (logo black-box), and theme-color highlights (missing black bar). Title slide now faithful; content slides (108 etc.) essentially pixel-faithful with live links.
+- Image handling: dedupe by md5, convert opaque PNG→JPG, cap 820px → `assets/slidimg/` cut **54 MB → 12 MB**. `js/slides-html.js` = 348 KB (inlined so it works from `file://`).
+- Wired into the lightbox: `#lbImg` → `#lbStage`; renders `CT_SLIDE_HTML[n]` with the **flat JPG as automatic fallback**. Renamed button to "More…" (dropped "original slide"). Gallery thumbnails stay flat JPG (perf); full view = HTML.
+- Verified: resource card → More… → HTML slide w/ 10 inline links (real URLs); no 404s, no console errors across all pages.
+
 ## 2026-06-17 — Links audit: per-slide links, nothing lost
 
 **User:** Spotted that the "7 minute video" (Vandana) and "Video about Mari Copeny" links — clickable in Google Slides — didn't seem clickable on the site; asked to "check all the slides for problems like this."
