@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library · Resources for Courageous Teachers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Permanent+Marker&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site">
+    <div class="nav-inner">
+      <a href="index.html" class="brand"><img src="assets/img/logo.png" alt="" class="brand-logo"> Courageous Teachers</a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#topics">Topics</a></li>
+        <li><a href="resources.html" class="active">Library</a></li>
+        <li><a href="slides.html">All Slides</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="resources.html" class="nav-cta">Browse resources</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrap lib-hero">
+    <h1>The Library</h1>
+    <p>Every slide, reborn as a searchable resource. Filter by topic, type, or grade band — or search for a person, a practice, or an idea.</p>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="wrap">
+      <div class="search-row">
+        <div class="search-box">
+          <span class="si">⌕</span>
+          <input type="search" id="search" placeholder="Search activities, quotes, people, ideas…" autocomplete="off">
+        </div>
+        <span class="count" id="count">—</span>
+        <button class="clear-btn" id="clearBtn" hidden>Clear all</button>
+      </div>
+
+      <div class="filter-row" id="typeFilters">
+        <span class="filter-label">Type</span>
+      </div>
+      <div class="filter-row" id="topicFilters">
+        <span class="filter-label">Topic</span>
+      </div>
+      <div class="filter-row" id="gradeFilters">
+        <span class="filter-label">Grade</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="wrap results">
+    <div class="cards" id="cards"></div>
+    <div class="empty" id="empty" hidden>
+      <div class="big">No resources match those filters.</div>
+      <p>Try removing a filter or clearing your search.</p>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal" id="modal">
+      <div class="modal-top" id="modalTop"></div>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <footer class="site">
+    <div class="wrap">
+      <div class="foot-bottom" style="border:none; margin:0; padding:0;">
+        <span class="inprogress-badge">✺ In-progress library · by Mx. Nicole Sumner</span>
+        <span><a href="mailto:sumnernicole@gmail.com">sumnernicole@gmail.com</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SLIDE LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+    <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+    <img id="lbImg" alt="Original slide">
+    <button class="lb-nav lb-next" id="lbNext" aria-label="Next">›</button>
+    <div class="lb-caption" id="lbCaption"></div>
+    <div class="lb-links" id="lbLinks"></div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/images.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

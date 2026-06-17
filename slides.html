@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Slides · Resources for Courageous Teachers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Permanent+Marker&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site">
+    <div class="nav-inner">
+      <a href="index.html" class="brand"><img src="assets/img/logo.png" alt="" class="brand-logo"> Courageous Teachers</a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#topics">Topics</a></li>
+        <li><a href="resources.html">Library</a></li>
+        <li><a href="slides.html" class="active">All Slides</a></li>
+        <li><a href="resources.html" class="nav-cta">Browse resources</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrap lib-hero">
+    <h1>All Slides</h1>
+    <p>The complete deck, slide by slide. Click any slide to view it full size — use ← → to move through them. Looking for something specific? The <a href="resources.html">Library</a> makes every slide searchable, with its links preserved.</p>
+  </div>
+
+  <div class="wrap" style="padding-bottom:5rem">
+    <div class="slide-grid" id="slideGrid"></div>
+  </div>
+
+  <!-- SLIDE LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+    <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+    <img id="lbImg" alt="Slide">
+    <button class="lb-nav lb-next" id="lbNext" aria-label="Next">›</button>
+    <div class="lb-caption" id="lbCaption"></div>
+    <div class="lb-links" id="lbLinks"></div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/images.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

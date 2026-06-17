@@ -1,0 +1,9 @@
+config/
+preview-*.png
+vis-*.png
+assets/_extract/
+b-*.png
+f-*.png
+scripts/mapping-report.json
+final-*.png
+h-*.png
