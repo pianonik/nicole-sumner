@@ -1,5 +1,11 @@
 # Courageous Teachers — History
 
+## 2026-06-17 (docs) — Draft email to Nicole (uncommitted)
+
+**User:** "Draft an email to Nicole in docs/site-plan.md explaining what we did and come up with some questions/suggestions for her on how it could be improved."
+
+**Response:** Created `docs/site-plan.md` — a plain-language draft email (no technical jargon, per the updated `~/.claude/CLAUDE.md` instruction to use plain English) from Nick to Nicole. Covers: the slideshow → searchable/filterable library reframe; that every link in the deck is now clickable on the slides (incl. the Vandana Shiva 7-min and Mari Copeny video links she flagged); her bold look/logo preserved; and the headline workflow — she keeps authoring in Google Slides and the site mirrors it. Includes two honest caveats (it's a draft; third-party image permissions now that it's public), six questions for her (audience, look, groupings/tags, image ownership, contact option, custom domain), and four suggestions (interactive Spectrum of Action + Scorecard, a Voices page, accessibility/readability pass, a welcome/orientation). Uncommitted at time of writing (untracked `docs/`).
+
 ## 2026-06-17 (deploy) — Live on GitHub Pages
 
 **User:** "can you push this stuff to a spot on github pages?" — then confirmed "that is publically accessible."
