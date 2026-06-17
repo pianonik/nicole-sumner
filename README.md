@@ -2,6 +2,8 @@
 
 A living, searchable web library reimagining Mx. Nicole Sumner's *"Resources for Courageous Teachers"* slideshow (CSUEB Teacher Education) — activist practices, arts integration & play for K–12 educators.
 
+**Live:** https://pianonik.github.io/nicole-sumner/ — hosted on GitHub Pages from the `main` branch (root). Any push to `main` auto-rebuilds the site; a `.nojekyll` file makes Pages serve the files as-is. Repo: `pianonik/nicole-sumner` (public).
+
 **The core idea:** the original 120-slide deck is linear, but its content is a non-linear, browsable resource library. This site turns each slide into a **tagged, filterable, deep-linkable resource card** so a teacher can find the right activity, routine, quote, or reading in seconds.
 
 Design and stack take inspiration from `~/Developer/elleniya` (palette-from-source, a distinctive display+body type pairing, an immersive quote-driven hero, and a planned passwordless CMS).

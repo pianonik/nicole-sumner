@@ -1,5 +1,31 @@
 # Courageous Teachers — History
 
+## 2026-06-17 (deploy) — Live on GitHub Pages
+
+**User:** "can you push this stuff to a spot on github pages?" — then confirmed "that is publically accessible."
+
+**Response:**
+- Flagged that Pages is outward-facing: it publishes the site to a public, indexable URL, and on a free plan the repo must be public too. User accepted public.
+- Pushed the pending HTML-slides work first via `cmt` (commit `51c83bf`, 150 files) so the remote had the latest, after `git add -A` (cmt's `git commit -a` won't stage new files like `js/slides-html.js`, `assets/slidimg/`).
+- Added `.nojekyll` at repo root so Pages serves files as-is (no Jekyll processing of any `_`-prefixed paths).
+- `gh repo edit pianonik/nicole-sumner --visibility public --accept-visibility-change-consequences` → repo PUBLIC.
+- Enabled Pages from `main` / root: `echo '{"source":{"branch":"main","path":"/"}}' | gh api --method POST repos/pianonik/nicole-sumner/pages --input -`.
+- Polled the build to `built`; verified the **live** site (not just local): `https://pianonik.github.io/nicole-sumner/` — all pages HTTP 200, and headless Chromium against the live URL confirmed the slide lightbox renders the HTML with 10 inline links on slide 62, no 404s, no console errors. All paths are relative, so they resolve correctly under the `/nicole-sumner/` subpath.
+- Committed a `.gitignore` tweak for `live-*.png` screenshot artifacts (`ac9d9da`).
+
+**Live URL:** https://pianonik.github.io/nicole-sumner/ — auto-rebuilds on every push to `main`.
+**Open:** copyright pass on third-party images is now a real pre-share to-do (public, indexable site).
+
+## 2026-06-17 (repo) — Created pianonik/nicole-sumner, no LFS needed
+
+**User:** "create a repo for this in pianonik@github - call it nicole-sumner and then push to it. Surely we need to enable LFS for this."
+
+**Response:**
+- Pushed back on LFS and verified rather than assumed: the heavy build inputs (`assets/_extract/`, ~315 MB — pptx/pdf/unzipped media/slide PNGs) are **gitignored**; only ~6.5 MB of small files was tracked, largest single file 140 KB — far under GitHub's 50/100 MB thresholds. So plain git, **no LFS**.
+- `gh` was authed as **pianonik** (SSH, `repo` scope). Read `~/Developer/moForte/scripts/cmt` to use it correctly (prepends `+->=branch=<branch>`, then `ssh-add moforte.pem` + `git push`).
+- `git init -b main` → `git config --local push.autoSetupRemote true` → `git add -A` → `gh repo create pianonik/nicole-sumner --private --source=. --remote=origin` (no push) → committed+pushed via `cmt` (initial commit `a438479`, 192 files). Sanity-checked 0 `_extract` files staged.
+- Created it **private** initially as a deliberate default given the un-cleared third-party images (later made public for Pages — see deploy entry above).
+
 ## 2026-06-17 — Faithful PPTX→HTML slides (Google Slides becomes the CMS)
 
 **User:** Drop the "original slide" wording (just "More…"); can the actual links be clickable on the slide, not just a list?; can we convert the deck to faithful HTML5+CSS? — "if we can pull it off then we can let her continue to work with the slides, since she's obviously so good at it." Chose **full rollout, all 133**.
