@@ -162,6 +162,14 @@
     videoOverlay.classList.remove('open');
     videoOverlay.querySelector('.vo-frame').innerHTML = '';   // unload iframe → stop playback
   }
+  // Esc closes the video first (capture phase, before the slide lightbox's own Esc
+  // handler). Always registered — the video overlay is used on the videos page too,
+  // where there's no slide lightbox.
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && videoOverlay && videoOverlay.classList.contains('open')) {
+      e.stopPropagation(); closeVideo();
+    }
+  }, true);
   function wireVideoLightbox() {
     const intercept = e => {
       const a = e.target.closest('a');
@@ -172,12 +180,6 @@
     el('lbStage').addEventListener('click', intercept);   // inline links on the HTML slide
     const box = el('lbLinks');
     if (box) box.addEventListener('click', intercept);    // links panel (flat-JPG fallback)
-    // Esc closes the video first (capture phase, before the lightbox's own Esc handler).
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && videoOverlay && videoOverlay.classList.contains('open')) {
-        e.stopPropagation(); closeVideo();
-      }
-    }, true);
   }
 
   /* ---------- gallery page (slides.html): grid of all slides ---------- */
@@ -189,6 +191,28 @@
       `<button class="slide-thumb" data-n="${n}"><img src="${slideURL(n)}" alt="Slide ${n}" loading="lazy"><span>${n}</span></button>`).join('');
     grid.querySelectorAll('.slide-thumb').forEach(b =>
       b.addEventListener('click', () => openLightbox(+b.dataset.n, all)));
+  }
+
+  /* ---------- video gallery (videos.html): all YouTube links, one place ---------- */
+  const vGrid = el('videoGrid');
+  if (vGrid) {
+    const vids = window.CT_VIDEOS || [];
+    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const slideLabel = sl => sl.length > 1 ? `Slides ${sl.join(', ')}` : `Slide ${sl[0]}`;
+    vGrid.innerHTML = vids.map(v => `
+      <button class="video-card${v.available ? '' : ' dead'}" data-id="${v.id}" ${v.available ? '' : 'disabled'}>
+        <div class="video-thumb">
+          <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="" loading="lazy">
+          <span class="slidechip">${slideLabel(v.slides)}</span>
+          <span class="play" aria-hidden="true"></span>
+        </div>
+        <div class="video-body">
+          <h3>${esc(v.title)}</h3>
+          ${v.channel ? `<span class="chan">${esc(v.channel)}</span>` : ''}
+        </div>
+      </button>`).join('');
+    vGrid.querySelectorAll('.video-card:not(.dead)').forEach(b =>
+      b.addEventListener('click', () => openVideo(b.dataset.id)));   // same lightbox trick as the slides
   }
 
   /* ============================================================

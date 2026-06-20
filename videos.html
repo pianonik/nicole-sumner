@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Slides · Resources for Courageous Teachers</title>
+  <title>Videos · Resources for Courageous Teachers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Permanent+Marker&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,35 +18,34 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#topics">Topics</a></li>
         <li><a href="resources.html">Library</a></li>
-        <li><a href="slides.html" class="active">All Slides</a></li>
-        <li><a href="videos.html">Videos</a></li>
+        <li><a href="slides.html">All Slides</a></li>
+        <li><a href="videos.html" class="active">Videos</a></li>
         <li><a href="resources.html" class="nav-cta">Browse resources</a></li>
       </ul>
     </div>
   </header>
 
   <div class="wrap lib-hero">
-    <h1>All Slides</h1>
-    <p>The complete deck, slide by slide. Click any slide to view it full size — use ← → to move through them. Looking for something specific? The <a href="resources.html">Library</a> makes every slide searchable, with its links preserved.</p>
+    <h1>Video Library</h1>
+    <p>Every video Nicole links to, gathered from across the whole deck into one place — there's no single playlist in the slides, so this collects them all. Click any one to watch it right here, without leaving the site.</p>
   </div>
 
   <div class="wrap" style="padding-bottom:5rem">
-    <div class="slide-grid" id="slideGrid"></div>
+    <div class="video-grid" id="videoGrid"></div>
   </div>
 
-  <!-- SLIDE LIGHTBOX -->
-  <div class="lightbox" id="lightbox">
-    <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
-    <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">‹</button>
-    <div class="lb-stage" id="lbStage"></div>
-    <button class="lb-nav lb-next" id="lbNext" aria-label="Next">›</button>
-    <div class="lb-caption" id="lbCaption"></div>
-    <div class="lb-links" id="lbLinks"></div>
-  </div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="foot-bottom">
+        <span class="inprogress-badge">✺ This is an in-progress slideshow, reimagined as a living site.</span>
+        <span>Videos gathered from the Courageous Teachers deck</span>
+      </div>
+    </div>
+  </footer>
 
   <script src="js/data.js"></script>
   <script src="js/images.js"></script>
-  <script src="js/slides-html.js"></script>
+  <script src="js/videos.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

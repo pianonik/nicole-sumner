@@ -20,12 +20,12 @@ Nicole keeps authoring in Google Slides — the site regenerates from her `.pptx
 
 1. In Google Slides: **File → Download → Microsoft PowerPoint (.pptx)**.
 2. Unzip it into `assets/_extract/unpacked/` (the `ppt/...` tree), and refresh the rendered slide PNGs in `assets/_extract/slides_png/` (PDF export → `pdftoppm`).
-3. Run the two build scripts:
+3. Regenerate all site data with one command:
    ```
-   node scripts/build-images.js        # links per slide, cover images, flat slide JPGs
-   node scripts/build-slides-html.js   # faithful HTML render of every slide
+   ./scripts/build-all.sh
    ```
-4. Commit. The site now reflects her edits — new links become clickable automatically.
+   This runs, in order: `build-images.js` (links per slide, covers, flat slide JPGs) → `build-videos.js` (gathers every YouTube link into the video gallery; order matters — it reads the link map images.js writes) → `build-slides-html.js` (faithful HTML render of every slide). This **is the build step of a deploy** — run it, commit, push.
+4. Commit. The site now reflects her edits — new links become clickable automatically, and any new YouTube videos appear in the gallery.
 
 `scripts/build-slides-html.js` parses each slide's shapes (position, fills, borders, rotation, fonts, colors incl. theme colors, text highlights, autofit) into absolutely-positioned HTML scaled by CSS container queries, with real `<a>` links inline. The flat JPG (`assets/slides/`) remains an automatic fallback for any slide that doesn't render cleanly (e.g. the 1 gradient / 2 table slides).
 

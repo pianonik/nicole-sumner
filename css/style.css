@@ -316,6 +316,24 @@ section.block { padding: 5.5rem 0; }
 .vo-close { position: absolute; top: 1.2rem; right: 1.4rem; width: 46px; height: 46px; border-radius: 50%; border: 2px solid #fff; background: transparent; color: #fff; font-size: 1.4rem; cursor: pointer; transition: background .15s; }
 .vo-close:hover { background: var(--red); border-color: var(--red); }
 
+/* ---------------- VIDEO GALLERY (videos.html) ---------------- */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.6rem; }
+.video-card { display: flex; flex-direction: column; text-align: left; padding: 0; border: 3px solid var(--black); background: #fff; cursor: pointer; overflow: hidden; transition: transform .12s, box-shadow .12s; }
+.video-card:hover, .video-card:focus-visible { transform: translate(-4px,-4px); box-shadow: 9px 9px 0 var(--red); outline: none; }
+.video-thumb { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-bottom: 3px solid var(--black); overflow: hidden; }
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-thumb .play { position: absolute; inset: 0; margin: auto; width: 60px; height: 60px; border-radius: 50%; background: var(--red); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.45); transition: transform .12s, background .12s; }
+.video-thumb .play::after { content: ''; border-style: solid; border-width: 11px 0 11px 18px; border-color: transparent transparent transparent #fff; margin-left: 4px; }
+.video-card:hover .play { transform: scale(1.12); background: var(--red-deep); }
+.video-thumb .slidechip { position: absolute; top: 0; left: 0; font-family: var(--font-display); font-weight: 800; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.04em; color: #fff; background: var(--black); padding: 0.2rem 0.55rem; }
+.video-body { padding: 0.85rem 1rem 1rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+.video-body h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.02rem; line-height: 1.18; letter-spacing: -0.01em; color: var(--ink); }
+.video-body .chan { font-size: 0.82rem; color: var(--ink-soft); display: flex; align-items: center; gap: 0.4rem; }
+.video-body .chan::before { content: '▶'; color: var(--red); font-size: 0.7rem; }
+.video-card.dead { cursor: default; opacity: 0.6; }
+.video-card.dead:hover { transform: none; box-shadow: none; }
+.video-card.dead .play { background: #888; }
+
 /* ---------------- SLIDE GALLERY ---------------- */
 .slide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1rem; }
 .slide-thumb { position: relative; padding: 0; border: 2px solid var(--black); background: #fff; cursor: pointer; overflow: hidden; aspect-ratio: 4 / 3; transition: transform .12s, box-shadow .12s; }
