@@ -1,5 +1,21 @@
 # Courageous Teachers — History
 
+## 2026-06-19 (slides) — Fix slide cropping; drop redundant links panel; YouTube lightbox
+
+**User:** Reviewed the live site with Nicole and recorded a VibeNik walkthrough (`vibenik-2026-06-19-19-35-56`) flagging three things: (1) text is **cropped** on a bunch of HTML slides — "things that are a weird angle are cropped sometimes"; (2) "I don't want this links on the slide thing… these links here [inline on the slide] are perfectly good"; (3) for YouTube links, "bring them up in a sort of light box thing like we do here on Mo4k.com." Then: "make sure you regenerate **all** of the slides", and finally "push to github and github pages."
+
+**Response — committed `9db69b1`, live on Pages:**
+- **Diagnosed the cropping from the source, not by eye.** Two compounding causes: (a) runs without an explicit font were falling back to **Inter**, but the deck's theme + slide master default is **Arial** (Inter is wider → more wrapping → overflow); (b) the renderer ignored the deck's real line spacing — 30 slides set `lnSpcReduction`, 287 paragraphs set explicit `<a:lnSpc>` spcPct — and clipped overflow with `overflow:hidden`.
+- **Fixes in `scripts/build-slides-html.js`:** base font → Arial (missing named fonts also degrade to Arial, not Inter); honor per-paragraph `spcPct` and `normAutofit` `lnSpcReduction` with a "single-spacing" base of **1.02** tuned to the deck's own PDF render (1.12 was too loose); text boxes no longer clip (`overflow:visible` — PowerPoint never clips text either); each text box's content wrapped in a `.tw` div.
+- **Shrink-to-fit (the guarantee), `js/main.js`:** when the browser still renders a box taller than the deck sized it for, `fitSlideText()` scales the `.tw` down at lightbox-open time — exactly what PowerPoint/Google Slides autofit does. Reordered `openLightbox` to show the lightbox *before* measuring so heights are real. An automated Playwright audit over **all 133 slides** went from whole lines cut off to **zero slides with text past the slide edge**; smallest applied scale 0.675 (still legible). Verified the worst cases visually: slide 11 Sadhguru bubble, slide 19 Alicia Keys quote, slide 41 rotated "banned books" note — all now complete top-to-bottom.
+- **Links panel:** the "Links on this slide" side panel now shows **only** on flat-JPG fallback slides (where inline links don't exist); on the ~131 HTML slides the inline links suffice, so the duplicate panel is gone.
+- **YouTube lightbox:** YouTube links (`watch?v=`, `youtu.be/`, `embed/`, `shorts/`, `live/`) are intercepted on `#lbStage`/`#lbLinks` and play in a centered `.video-overlay` iframe (Esc / click-outside / ✕; Esc closes the video first via a capture-phase handler). Verified with the Vandana Shiva "7-minute video" Nicole flagged earlier.
+- **Regenerated all 133 slides** (`js/slides-html.js`, 370 KB); confirmed every text-bearing slide carries the `.tw` wrapper (the 5 without it — 114/119/130/131/132 — are image-only, correct). Did **not** re-run `build-images.js` (inputs unchanged → identical output).
+- **Deploy:** `cmt` → push `041b8bd..9db69b1`; Pages rebuilt in ~16s; verified the **live** JS actually contains `fitSlideText`, `video-overlay`, and `.tw` (not just the commit). All pages HTTP 200.
+
+**Files:** `scripts/build-slides-html.js`, `js/main.js`, `css/style.css`, `js/slides-html.js` (regenerated).
+**Live:** https://pianonik.github.io/nicole-sumner/
+
 ## 2026-06-17 (docs) — Draft email to Nicole (uncommitted)
 
 **User:** "Draft an email to Nicole in docs/site-plan.md explaining what we did and come up with some questions/suggestions for her on how it could be improved."

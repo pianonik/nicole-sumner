@@ -29,6 +29,10 @@ Nicole keeps authoring in Google Slides — the site regenerates from her `.pptx
 
 `scripts/build-slides-html.js` parses each slide's shapes (position, fills, borders, rotation, fonts, colors incl. theme colors, text highlights, autofit) into absolutely-positioned HTML scaled by CSS container queries, with real `<a>` links inline. The flat JPG (`assets/slides/`) remains an automatic fallback for any slide that doesn't render cleanly (e.g. the 1 gradient / 2 table slides).
 
+**Faithful text fit (no cropping).** The render matches the deck's own metrics so text doesn't overflow: the base font is **Arial** (the deck's theme/master default — Inter is wider and over-wraps), and it honors each paragraph's real line spacing (`<a:lnSpc>` spcPct + `normAutofit` lnSpcReduction, "single" = 1.02). Text boxes don't clip (`overflow:visible`). As a final guarantee, each box's text lives in a `.tw` wrapper that the lightbox **shrinks to fit** at open time (`fitSlideText` in `js/main.js`) whenever the browser still renders it taller than its box — the same thing PowerPoint/Google Slides autofit does, so no line is ever lost.
+
+**Lightbox behavior.** Inline links on the rendered slide are the primary way to reach a slide's links; the "Links on this slide" side panel only appears on flat-JPG fallback slides (where inline links don't exist). YouTube links play inline in a centered `.video-overlay` (embedded iframe, Esc / click-outside / ✕) instead of navigating away.
+
 ## Stack
 
 - Plain HTML + CSS + vanilla JS — no build step, no dependencies.
