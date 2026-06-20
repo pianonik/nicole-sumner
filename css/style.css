@@ -289,8 +289,12 @@ section.block { padding: 5.5rem 0; }
 .lb-stage { width: min(70vw, 1000px); aspect-ratio: 16 / 9; max-height: 82vh; border: 3px solid var(--black); box-shadow: 0 20px 60px rgba(0,0,0,0.6); background: #fff; overflow: hidden; }
 .lb-stage > img { width: 100%; height: 100%; object-fit: contain; display: block; }
 /* a rendered HTML slide (real text + inline clickable links) */
-.slide-html { container-type: inline-size; position: relative; width: 100%; height: 100%; overflow: hidden; font-family: Inter, Arial, sans-serif; line-height: 1.12; color: #000; background: #fff; }
+/* Base font = Arial: the deck's theme/master default. Matching it (rather than the
+   wider Inter) makes text wrap to the same number of lines as Google Slides, so
+   boxes no longer overflow and get clipped. */
+.slide-html { container-type: inline-size; position: relative; width: 100%; height: 100%; overflow: hidden; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; line-height: 1.12; color: #000; background: #fff; }
 .slide-html p { margin: 0; white-space: pre-wrap; }
+.slide-html .tw { width: 100%; }   /* text wrapper — JS shrink-to-fit scales this when it overflows its box */
 .slide-html a { cursor: pointer; }
 .slide-html a:hover { filter: brightness(0.8); }
 .lb-links { width: 300px; max-height: 82vh; overflow-y: auto; background: var(--paper); border: 3px solid var(--black); box-shadow: 8px 8px 0 rgba(0,0,0,0.4); padding: 1.1rem 1.2rem; }
@@ -303,6 +307,14 @@ section.block { padding: 5.5rem 0; }
 .lb-nav:hover { background: var(--red); border-color: var(--red); }
 .lb-prev { left: 1.4rem; } .lb-next { right: 1.4rem; }
 .lb-caption { position: absolute; bottom: 1.2rem; left: 50%; transform: translateX(-50%); color: #fff; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; }
+
+/* ---------------- YOUTUBE VIDEO OVERLAY (plays over the lightbox) ---------------- */
+.video-overlay { position: fixed; inset: 0; z-index: 4000; background: rgba(0,0,0,0.88); display: none; align-items: center; justify-content: center; padding: 4vh 4vw; }
+.video-overlay.open { display: flex; }
+.video-overlay .vo-frame { width: min(90vw, 1280px); aspect-ratio: 16 / 9; max-height: 88vh; background: #000; border: 3px solid var(--black); box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+.video-overlay .vo-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.vo-close { position: absolute; top: 1.2rem; right: 1.4rem; width: 46px; height: 46px; border-radius: 50%; border: 2px solid #fff; background: transparent; color: #fff; font-size: 1.4rem; cursor: pointer; transition: background .15s; }
+.vo-close:hover { background: var(--red); border-color: var(--red); }
 
 /* ---------------- SLIDE GALLERY ---------------- */
 .slide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1rem; }

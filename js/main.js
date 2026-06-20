@@ -69,18 +69,44 @@
   function openLightbox(slideNum, list) {
     lbList = (list && list.length) ? list : [slideNum];
     lbIdx = Math.max(0, lbList.indexOf(slideNum));
-    showLb(); lb.classList.add('open'); document.body.style.overflow = 'hidden';
+    // Make the lightbox visible BEFORE rendering so shrink-to-fit can measure real heights.
+    lb.classList.add('open'); document.body.style.overflow = 'hidden';
+    showLb();
+  }
+  // Shrink-to-fit: when the browser renders a text box taller than the deck sized it for
+  // (font-metric differences), scale that text down so nothing spills off the slide — the
+  // same thing PowerPoint/Google Slides autofit does. Faithful, and no text is ever lost.
+  function fitSlideText(stage) {
+    const root = stage.querySelector('.slide-html');
+    if (!root) return;
+    for (const box of root.querySelectorAll(':scope > div')) {
+      const tw = box.querySelector(':scope > .tw');
+      if (!tw) continue;
+      tw.style.transform = '';                       // reset any prior fit before measuring
+      const avail = box.clientHeight, need = box.scrollHeight;
+      if (avail && need > avail + 1) {
+        const jc = getComputedStyle(box).justifyContent;
+        const oy = jc === 'center' ? 'center' : jc === 'flex-end' ? 'bottom' : 'top';
+        tw.style.transformOrigin = `left ${oy}`;
+        tw.style.transform = `scale(${(avail / need).toFixed(4)})`;
+      }
+    }
   }
   function showLb() {
     const n = lbList[lbIdx];
     const html = window.CT_SLIDE_HTML && window.CT_SLIDE_HTML[n];  // faithful HTML (real text + inline links)
     el('lbStage').innerHTML = html || `<img src="${slideURL(n)}" alt="Slide ${n}">`;  // fallback to flat JPG
+    if (html) fitSlideText(el('lbStage'));
     el('lbCaption').textContent = `Slide ${n} of ${window.CT_SLIDE_COUNT || lbList.length}`;
     const multi = lbList.length > 1 ? 'visible' : 'hidden';
     el('lbPrev').style.visibility = multi; el('lbNext').style.visibility = multi;
-    const lk = linksForSlide(n);            // make the links ON this slide clickable
+    // The side "Links on this slide" panel is only needed as a fallback: when a slide
+    // renders as faithful HTML, its links are already inline & clickable on the slide
+    // itself, so the panel would just duplicate them. Show it only for slides that fall
+    // back to the flat JPG (no HTML render), where the inline links don't exist.
     const box = el('lbLinks');
     if (box) {
+      const lk = html ? [] : linksForSlide(n);
       box.innerHTML = lk.length
         ? `<div class="lb-links-head">Links on this slide</div><ul class="links-list">${linkItems(lk)}</ul>` : '';
       box.style.display = lk.length ? 'block' : 'none';
@@ -103,6 +129,55 @@
       if (e.key === 'ArrowLeft') stepLb(-1);
       if (e.key === 'ArrowRight') stepLb(1);
     });
+    wireVideoLightbox();
+  }
+
+  /* ============================================================
+     YOUTUBE LIGHTBOX — a YouTube link on a slide plays inline in
+     an overlay (like mo4k.com) instead of navigating away.
+     ============================================================ */
+  const ytId = url => {
+    const m = String(url).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/);
+    return m ? m[1] : null;
+  };
+  let videoOverlay = null;
+  function openVideo(id) {
+    if (!videoOverlay) {
+      videoOverlay = document.createElement('div');
+      videoOverlay.className = 'video-overlay';
+      videoOverlay.innerHTML =
+        '<button class="vo-close" aria-label="Close">✕</button><div class="vo-frame"></div>';
+      document.body.appendChild(videoOverlay);
+      videoOverlay.addEventListener('click', e => {
+        if (e.target === videoOverlay || e.target.classList.contains('vo-close')) closeVideo();
+      });
+    }
+    videoOverlay.querySelector('.vo-frame').innerHTML =
+      `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" ` +
+      'allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+    videoOverlay.classList.add('open');
+  }
+  function closeVideo() {
+    if (!videoOverlay) return;
+    videoOverlay.classList.remove('open');
+    videoOverlay.querySelector('.vo-frame').innerHTML = '';   // unload iframe → stop playback
+  }
+  function wireVideoLightbox() {
+    const intercept = e => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      const id = ytId(a.href);
+      if (id) { e.preventDefault(); openVideo(id); }
+    };
+    el('lbStage').addEventListener('click', intercept);   // inline links on the HTML slide
+    const box = el('lbLinks');
+    if (box) box.addEventListener('click', intercept);    // links panel (flat-JPG fallback)
+    // Esc closes the video first (capture phase, before the lightbox's own Esc handler).
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && videoOverlay && videoOverlay.classList.contains('open')) {
+        e.stopPropagation(); closeVideo();
+      }
+    }, true);
   }
 
   /* ---------- gallery page (slides.html): grid of all slides ---------- */

@@ -39,7 +39,9 @@ const attr = (xml, name) => { const m = xml.match(new RegExp(name + '="([^"]*)"'
 const ALIGN = { l: 'left', ctr: 'center', r: 'right', just: 'justify' };
 const ANCHOR = { t: 'flex-start', ctr: 'center', b: 'flex-end' };
 const FONT_MAP = { 'Comic Sans MS': "'Comic Sans MS','Permanent Marker',cursive" };
-const fontFor = tf => tf ? (FONT_MAP[tf] || `'${tf}', Inter, Arial, sans-serif`) : 'Inter, Arial, sans-serif';
+// Fall back to Arial (the deck's default font), not Inter — Inter is wider, so a missing
+// named font (Calibri, Roboto, Nunito…) rendered in Inter over-wraps and overflows the box.
+const fontFor = tf => tf ? (FONT_MAP[tf] || `'${tf}', Arial, Helvetica, sans-serif`) : 'Arial, Helvetica, sans-serif';
 
 /* theme colour map: resolve schemeClr names (dk1/lt1/accent1…) to hex */
 const themeXml = fs.readFileSync(path.join(PPT, 'theme/theme1.xml'), 'utf8');
@@ -81,11 +83,20 @@ const order = [...pres.matchAll(/<p:sldId [^>]*r:id="(rId\d+)"/g)].map(m => r2f[
 /* ---- render a text body to paragraph HTML ---- */
 function renderText(txBody, links) {
   const scale = +((txBody.match(/<a:normAutofit[^>]*fontScale="(\d+)"/) || [])[1] || 100000) / 100000;
+  // Line spacing, the other half of the cropping bug. Three things feed it:
+  //  - LH_BASE: CSS line-height for PowerPoint/Google "single" spacing (Arial). 1.12 was
+  //    too loose vs the deck's own render and pushed text past the box; 1.02 matches it.
+  //  - per-paragraph <a:lnSpc> spcPct (115%, 150%…) — was ignored entirely before.
+  //  - normAutofit lnSpcReduction — PowerPoint tightens lines when it shrinks text to fit.
+  const LH_BASE = 1.02;
+  const lnRed = +((txBody.match(/<a:normAutofit[^>]*lnSpcReduction="(\d+)"/) || [])[1] || 0) / 100000;
   let html = '';
   for (const p of txBody.matchAll(/<a:p>([\s\S]*?)<\/a:p>/g)) {
     const b = p[1];
     const pPr = (b.match(/<a:pPr\b([^>]*?)\/?>/) || [])[1] || '';
     const align = ALIGN[attr(pPr, 'algn')] || 'left';
+    const spcPct = +((b.match(/<a:lnSpc>\s*<a:spcPct val="(\d+)"/) || [])[1] || 100000) / 100000;
+    const lh = (LH_BASE * spcPct * (1 - lnRed)).toFixed(3);
     let runs = '';
     for (const node of b.matchAll(/<a:r>([\s\S]*?)<\/a:r>|<a:br\s*\/>/g)) {
       if (node[0].startsWith('<a:br')) { runs += '<br>'; continue; }
@@ -113,7 +124,7 @@ function renderText(txBody, links) {
         runs += `<span style="${st}">${esc(decode(t))}</span>`;
       }
     }
-    html += `<p style="text-align:${align}">${runs || '&nbsp;'}</p>`;
+    html += `<p style="text-align:${align};line-height:${lh}">${runs || '&nbsp;'}</p>`;
   }
   return html;
 }
@@ -168,8 +179,13 @@ function renderSlide(file) {
       if (fill) style += `background:#${fill};`;
       if (lnColor) style += `border:0.13cqw solid #${lnColor};`;
       if (geom === 'roundRect') style += 'border-radius:1.2cqw;';
-      style += `display:flex;flex-direction:column;justify-content:${anchor};padding:0.3cqw 0.55cqw;overflow:hidden;`;
-      out += `<div style="${style}">${renderText(txBody, links)}</div>`;
+      // PowerPoint never clips text that runs past its shape — it spills out. We used to
+      // clip (overflow:hidden), which cut off the last line(s) on tighter slides. Let it
+      // spill instead; the slide frame (.lb-stage / .slide-html) still clips at the edge.
+      style += `display:flex;flex-direction:column;justify-content:${anchor};padding:0.3cqw 0.55cqw;overflow:visible;`;
+      // Text is wrapped in a .tw so the lightbox can shrink-to-fit it (like PowerPoint's
+      // autofit) when the browser's font metrics make it taller than its box.
+      out += `<div style="${style}"><div class="tw">${renderText(txBody, links)}</div></div>`;
     }
   }
   return out + '</div>';
