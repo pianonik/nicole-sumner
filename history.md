@@ -1,5 +1,17 @@
 # Courageous Teachers — History
 
+## 2026-06-19 (videos) — Video Library page: harvest every YouTube link; fold into the deploy
+
+**User:** "Make a youtube video gallery page — harvest youtube video links from all the pages — her links are all over the place, not a single youtube playlist — make it look good, style it like the rest of the site." Then: "use the same 'lightbox' trick you did for the other video links", and "make the generation of this video page part of the deploy process." Committed `d9b42b3`, live on Pages.
+
+**Response:**
+- **Harvested 19 unique YouTube videos** scattered across ~14 slides (no playlist in the deck). New `scripts/build-videos.js` reads the per-slide link map from `js/images.js` (`CT_SLIDE_LINKS`), matches the same YouTube id regex `main.js` uses, dedupes by video id, and **fetches each video's real title + channel from YouTube's public oEmbed endpoint** (`/oembed?format=json` via curl, no API key) — so cards show "Vandana Shiva: How to decolonize the global economy — Global Landscapes Forum" instead of the deck's ad-hoc anchor text ("Video", "demo", "7 minute video"). Deleted/private videos are kept but flagged `available:false`. Writes `js/videos.js` (`window.CT_VIDEOS`, sorted by first slide). All 19 resolved live.
+- **`videos.html`** mirrors `slides.html` scaffold (header/nav + lib-hero + `#videoGrid` + footer). **`js/main.js`** renders the grid from `CT_VIDEOS` (thumbnail `i.ytimg.com/vi/<id>/hqdefault.jpg` cropped 16:9, a "Slide N"/"Slides N, M" chip, bold title, channel line); a card click calls `openVideo(id)` — the **same `.video-overlay` lightbox** used for inline slide links. Moved the overlay's Esc handler out of `wireVideoLightbox` to IIFE top-level so it's always registered (the videos page has no slide lightbox `lb`).
+- **`css/style.css`:** `.video-grid` / `.video-card` styled in the site's bold language — chunky black borders, red play button (CSS triangle), hard-offset hover shadow (`translate(-4px,-4px); box-shadow: 9px 9px 0 var(--red)`), Archivo titles, black slide chip.
+- **Nav:** added "Videos" to `index.html`, `resources.html`, `slides.html`, `videos.html`.
+- **Deploy integration:** new `scripts/build-all.sh` regenerates everything in dependency order — `build-images.js` → `build-videos.js` (reads the link map images.js writes) → `build-slides-html.js`. This is the build step of a deploy: run it, commit, push. README step 3 now calls it.
+- **Verified** headless: 19 cards with real titles, card→lightbox plays, Esc closes, no console errors; styling screenshot reviewed. After push, polled Pages to `built` and confirmed the **live** `videos.html`/`js/videos.js` = 200, 19 videos, Videos nav link present.
+
 ## 2026-06-19 (links) — Dead-link audit + report for Nicole; auto-fix Project Zero links; editor-access email
 
 **User:** "check all the slides for dead links and write a report for Nicole in docs/dead-links.md — suggest alternatives, tell whether the domain name even exists." Then a thread of decisions: clarified that the deck is the source of truth so fixes belong in her slides (a website-only patch gets overwritten on the next rebuild); realized **edit access** to the deck means *we* can fix them; asked to make the report "super clear, super plain English so she can't fail editing it"; approved auto-fixing the mechanical Project Zero links in the build + committing the report ("yes and yes"); finally asked for an email draft asking Nicole for Editor access.
