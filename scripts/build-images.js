@@ -25,6 +25,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execSync } = require('child_process');
+const { fixLink } = require('./link-fixups');   // mechanical URL corrections (e.g. Project Zero www->non-www)
 
 const ROOT = path.resolve(__dirname, '..');
 const PPT = path.join(ROOT, 'assets/_extract/unpacked/ppt');
@@ -76,7 +77,7 @@ const fallbackLabel = url =>
 const slideLinks = (xml, relsXml) => {
   const url = {}; // rId -> url
   const re = /<Relationship[^>]*Id="(rId\d+)"[^>]*Type="[^"]*\/hyperlink"[^>]*Target="([^"]*)"/g;
-  let m; while ((m = re.exec(relsXml))) url[m[1]] = decode(m[2]);
+  let m; while ((m = re.exec(relsXml))) url[m[1]] = fixLink(decode(m[2]));
 
   const anchor = {}; // rId -> best anchor text
   // 1) text runs: a <a:r> whose run-properties carry an hlinkClick, with its <a:t> text

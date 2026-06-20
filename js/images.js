@@ -320,7 +320,7 @@ const CT_SLIDE_LINKS = {
  "18": [
   {
    "text": "Children Are Citizens",
-   "url": "http://www.pz.harvard.edu/projects/children-are-citizens"
+   "url": "https://pz.harvard.edu/projects/children-are-citizens"
   },
   {
    "text": "Research story",
@@ -582,11 +582,11 @@ const CT_SLIDE_LINKS = {
  "62": [
   {
    "text": "thinking dispositions",
-   "url": "http://www.pz.harvard.edu/resources/thinking-dispositions"
+   "url": "https://pz.harvard.edu/resources/thinking-dispositions"
   },
   {
    "text": "Harvard’s Project Zero",
-   "url": "http://www.pz.harvard.edu/who-we-are/about"
+   "url": "https://pz.harvard.edu/who-we-are/about"
   },
   {
    "text": "READ MORE",
@@ -598,7 +598,7 @@ const CT_SLIDE_LINKS = {
   },
   {
    "text": "Visible thinking",
-   "url": "http://www.pz.harvard.edu/projects/visible-thinking"
+   "url": "https://pz.harvard.edu/projects/visible-thinking"
   },
   {
    "text": "visible learning research by John Hattie",
@@ -608,7 +608,7 @@ const CT_SLIDE_LINKS = {
  "66": [
   {
    "text": "JusticexDesign",
-   "url": "http://www.pz.harvard.edu/projects/justicexdesign"
+   "url": "https://pz.harvard.edu/projects/justicexdesign"
   },
   {
    "text": "the Agency",
@@ -616,7 +616,7 @@ const CT_SLIDE_LINKS = {
   },
   {
    "text": "Voice, Choice & Mending",
-   "url": "http://www.pz.harvard.edu/sites/default/files/Voice%2C%20Choice%2C%20and%20Mending_0.pdf"
+   "url": "https://pz.harvard.edu/sites/default/files/Voice%2C%20Choice%2C%20and%20Mending_0.pdf"
   }
  ],
  "67": [
@@ -758,7 +758,7 @@ const CT_SLIDE_LINKS = {
  "82": [
   {
    "text": "Children Are Citizens",
-   "url": "http://www.pz.harvard.edu/projects/children-are-citizens"
+   "url": "https://pz.harvard.edu/projects/children-are-citizens"
   },
   {
    "text": "Research story",
@@ -992,13 +992,13 @@ const CT_SLIDE_LINKS = {
  "124": [
   {
    "text": "See Think Me We",
-   "url": "http://www.pz.harvard.edu/resources/see-think-me-we"
+   "url": "https://pz.harvard.edu/resources/see-think-me-we"
   }
  ],
  "125": [
   {
    "text": "Making Learning Visible",
-   "url": "http://www.pz.harvard.edu/projects/making-learning-visible"
+   "url": "https://pz.harvard.edu/projects/making-learning-visible"
   },
   {
    "text": "Edutopia",

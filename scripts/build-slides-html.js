@@ -21,6 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execSync } = require('child_process');
+const { fixLink } = require('./link-fixups');   // mechanical URL corrections (e.g. Project Zero www->non-www)
 
 const ROOT = path.resolve(__dirname, '..');
 const PPT = path.join(ROOT, 'assets/_extract/unpacked/ppt');
@@ -134,7 +135,7 @@ function renderSlide(file) {
   const relsXml = fs.readFileSync(path.join(PPT, 'slides/_rels', file + '.rels'), 'utf8');
   const img = {}, links = {};
   for (const m of relsXml.matchAll(/Id="(rId\d+)"[^>]*Type="[^"]*\/image"[^>]*Target="\.\.\/media\/([^"]+)"/g)) img[m[1]] = m[2];
-  for (const m of relsXml.matchAll(/Id="(rId\d+)"[^>]*Type="[^"]*\/hyperlink"[^>]*Target="([^"]*)"/g)) links[m[1]] = decode(m[2]);
+  for (const m of relsXml.matchAll(/Id="(rId\d+)"[^>]*Type="[^"]*\/hyperlink"[^>]*Target="([^"]*)"/g)) links[m[1]] = fixLink(decode(m[2]));
 
   const bg = (xml.match(/<p:bg>[\s\S]*?<a:srgbClr val="([0-9A-Fa-f]{6})"/) || [])[1] || 'FFFFFF';
   let out = `<div class="slide-html" style="background:#${bg}">`;
