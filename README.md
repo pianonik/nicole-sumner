@@ -78,6 +78,8 @@ Everything is mapped **deterministically from the pptx XML**, not by eye:
 
 Coverage: **all 148 links across 77 slides** are captured per-slide, so every link is clickable from the All Slides gallery — even on slides that didn't map to a resource (nothing is lost). 76 of 102 resources additionally map to a slide (47 with a cover). Re-run the script anytime resources change.
 
+**Link corrections (`scripts/link-fixups.js`).** Both build scripts run every extracted hyperlink through a shared `fixLink()` — a short list of *deterministic, no-judgment* URL rewrites (e.g. Harvard Project Zero retired its `www.` host, so `http://www.pz.harvard.edu/x` → `https://pz.harvard.edu/x`, same page). Use it only for mechanical fixes where a site moved but the content is identical; anything needing an editorial choice belongs in the deck. A full link audit and the per-slide fix list for Nicole live in `docs/dead-links.md`. **Never hand-edit the generated `js/images.js` / `js/slides-html.js`** — they're overwritten on every rebuild from the deck.
+
 > Copyright: many images are third-party (portraits, news photos). Fine for review; a licensing/credit pass is needed before any public launch. (Deferred for now.)
 
 ## Content model
